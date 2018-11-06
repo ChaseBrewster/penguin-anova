@@ -45,4 +45,42 @@ penguins2 <- penguins %>%
 - Exploratory graphs
 - Summary Statistics
 - Levene's tests for equal variances
+- one-way ANOVA
+- post-hoc testing
+
+```{r}
+hist <- ggplot(penguins2, aes(x = flipper_length), bins = 10) +
+  geom_histogram(aes(fill = common_name)) +
+  facet_wrap(~ common_name)
+
+hist
+
+qq <- ggplot(penguins2, aes(sample = flipper_length)) +
+  geom_qq() +
+  facet_wrap(~ common_name, scale = "free")
+
+qq
+
+# Leven's test for equal variances (> 2 groups...if you have two groups, use the F-test for equal variances)
+
+# We'll use the function leveneTest from the 'car' package
+
+peng_lev <- leveneTest(flipper_length ~ common_name, data = penguins2)
+
+peng_lev
+
+# We retain the null hypothesis of equal variances (p = 0.06)
+
+penguins_summary <- penguins2 %>% 
+  group_by(common_name) %>% 
+  summarize(
+    variance = var(flipper_length)
+  )
+
+penguins_summary
+```
+
+```{r}
+
+```
 
